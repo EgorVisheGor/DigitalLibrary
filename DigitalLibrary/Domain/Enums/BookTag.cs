@@ -56,6 +56,6 @@ namespace Domain.Enums
         Fashion,
         Humor,
         Anthology,
-        Classic
+        Classic,
     }
 }

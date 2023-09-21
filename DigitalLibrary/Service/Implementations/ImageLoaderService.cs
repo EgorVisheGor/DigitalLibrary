@@ -14,15 +14,14 @@ namespace Service.Implementations
             _folderPath = configuration["ImagesFolderPath"];
         }
 
-        public async Task<byte[]?> GetPhotoAsync(Section section, string imageId)
+        public async Task<Stream> GetPhotoAsync(Section section, string imageId)
         {
             string imagePath = GetPath(section, $"{imageId}");
 
             if (!File.Exists(imagePath))
                 imagePath = GetPath(section, $"default");
 
-            var file = await File.ReadAllBytesAsync(imagePath);
-            return file;
+            return File.OpenRead(imagePath);
         }
 
         public async Task SavePhotoAsync(IFormFile file, Section section, string photoId)

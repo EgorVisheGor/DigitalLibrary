@@ -17,26 +17,13 @@ namespace DigitalLibrary.Controllers
         [HttpGet("{section}/{imageId}")]
         public async Task<IActionResult> GetImage(string section, string imageId)
         {
-            byte[]? image = null;
-            switch(section)
+            return section switch
             {
-                case "authorphotos":
-                    image = await _imageService.GetPhotoAsync(Section.AuthorPhotos, imageId);
-                    break;
-                case "userphotos":
-                    image = await _imageService.GetPhotoAsync(Section.UserPhotos, imageId);
-                    break;
-                case "covers":
-                    image = await _imageService.GetPhotoAsync(Section.Covers, imageId);
-                    break;
-                default:
-                    return NotFound($"There is no section named {section}.");
-            }
-
-            Response.ContentType = "image/png";
-            await Response.Body.WriteAsync(image, 0, image.Length);
-
-            return Ok();
+                "authorphotos" => File(await _imageService.GetPhotoAsync(Section.AuthorPhotos, imageId), "image/png"),
+                "userphotos" => File(await _imageService.GetPhotoAsync(Section.UserPhotos, imageId), "image/png"),
+                "covers" => File(await _imageService.GetPhotoAsync(Section.Covers, imageId), "image/png"),
+                _ => NotFound($"There is no section named {section}.")
+            };
         }
     }
 }
